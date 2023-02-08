@@ -1,93 +1,129 @@
 <template>
-  <form @submit.prevent="saveUser">
-    <h2>Регистрация</h2>
-    <div>
-      <label for="firstName">Имя</label>
-      <input id="firstName" v-model="firstName" type="text" placeholder="Георгий">
-    </div>
-    <div>
-      <label for="lastName">Фамилия</label>
-      <input id="lastName" v-model="lastName" type="text" placeholder="Горошин">
-    </div>
-    <div>
-      <label for="username">Логин</label>
-      <input id="username" v-model="username" type="text" placeholder="User01">
-    </div>
-    <div>
-      <label for="password">Пароль</label>
-      <input id="password" v-model="password" type="password" placeholder="*******">
-    </div>
-    <div>
-      <label for="password2">Подтверждение пароля</label>
-      <input id="password2" v-model="password2" type="password" placeholder="*******">
-    </div>
-    <input type="submit" value="Зарегистрироваться">
-  </form>
+  <div id="loginDiv">
+    <form @submit.prevent="registerValidator">
+      <input type="text" v-model="fullName" placeholder="ФИО">
+      <input type="text" v-model="email" placeholder="email">
+      <input type="password" v-model="password" placeholder="Пароль">
+      <div id="formBtns">
+        <router-link to="login">Вход</router-link>
+        <input type="submit" value="Зарегистрироваться">
+      </div>
+    </form>
+    <p style="color: red" v-for="error in registerErrors" v-bind:key="error">{{error}}</p>
+    <p style="color: red" v-if="this.$store.state.AUTH_ERROR.length !== 0">{{this.$store.state.AUTH_ERROR}}</p>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
-    name: "RegisterView",
-    data() {
-        return {
-            firstName: '',
-            lastName: '',
-            username: '',
-            password: '',
-            password2: '',
-        }
-    },
-    methods: {
-        async saveUser() {
-            const responce = await axios.post('register', {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                username: this.username,
-                password: this.password,
-                password2: this.password2,
-            });
-            console.log(responce);
-        },
+  name: "RegisterPage",
+  data(){
+    return{
+      fullName: '',
+      email: '',
+      password: '',
+      registerErrors: [],
     }
+  },
+  methods: {
+    register(){
+      let USERDATA = {
+        fio: JSON.parse(JSON.stringify(this.fullName)),
+        email: JSON.parse(JSON.stringify(this.email)),
+        password: JSON.parse(JSON.stringify(this.password)),
+      }
+
+      this.$store.dispatch('REGISTER', USERDATA)
+    },
+    registerValidator(){
+      this.registerErrors = []
+
+      if(!this.fullName && !this.email && !this.password) {
+        this.registerErrors.push('*все поля должны быть заполнены')
+      }else{
+        if(this.password.length < 6){
+          this.registerErrors.push('*пароль должен быть длинее 6 символов')
+        }
+        if(!this.password.indexOf(' ')===-1){
+          this.registerErrors.push('*пароль не может содержать пробелы')
+        }
+        if(this.email.indexOf('@')===-1){
+          this.registerErrors.push('*электронная почта должна содержать символ "@"')
+        }
+        if(!this.email.indexOf(' ')===-1){
+          this.registerErrors.push('*электронная почта не может содержать пробелы')
+        }
+        if(this.fullName.split(' ').length !== 3){
+          this.registerErrors.push('ФИО должно состоять из фамилии, имени и отчества (3 слова)')
+        }
+      }
+
+
+      if(this.registerErrors.length===0){
+        this.register()
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-  form > div {
-    width: 420px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+#loginDiv{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+form{
+  margin-top: 100px;
+  border-radius: 10px;
+  width: 300px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background: mediumseagreen;
+}
+input[type=text], input[type=password], input[type=email]{
+  color: white;
+  background: transparent;
+  border: none;
+  padding: 2px;
+  outline: none;
+  border-bottom: 2px solid white;
+}
 
-  form > div > label {
-    width: 120px;
-  }
+input[type=text]::placeholder, input[type=password]::placeholder, input[type=email]::placeholder{
+  color: white;
+}
 
-  form > div > input {
-    margin: 10px 0;
-    width: 250px;
-    height: 30px;
-    padding-left: 10px;
-    border: 2px solid #2c3e50;
-    border-radius: 5px;
-  }
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus{
+  border-bottom: 2px solid forestgreen;
+}
 
-  form > div > input:focus {
-    outline: none;
-    border: 2px solid rgb(248, 98, 36);
-  }
+#formBtns{
+  width: 260px;
+  display: flex;
+  justify-content: space-around;
+}
 
-  form > input {
-    margin: 20px 0;
-    width: 200px;
-    height: 35px;
-    border: 2px solid #2c3e50;
-    border-radius: 5px;
-    background: rgba(239, 88, 25, 0.8);
-    cursor: pointer;
-  }
+#formBtns a{
+  color: white;
+}
+
+input[type=submit]{
+  width: 140px;
+  height: 30px;
+  background-color: forestgreen;
+  outline: none;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+input[type=submit]:hover{
+  background-color: limegreen;
+  color: dimgray;
+}
 </style>
