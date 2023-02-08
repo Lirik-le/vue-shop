@@ -1,9 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CartView from '../views/CartView.vue'
-import CatalogView from '../views/CatalogView.vue'
-import LoginView from '../views/LoginView.vue'
 import OrdersView from '../views/OrdersView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import store from '../store'
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/login')
+}
 
 const routes = [
   {
@@ -18,12 +33,18 @@ const routes = [
   {
     path: '/catalog',
     name: 'catalog',
-    component: CatalogView
+    component: function () {
+      return import('../views/CatalogView.vue')
+    },
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: function () {
+      return import('../views/LoginView.vue')
+    },
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: '/orders',
@@ -37,9 +58,9 @@ const routes = [
   },
 ]
 
-const router = createRouter({
+const index = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
 
-export default router
+export default index

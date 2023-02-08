@@ -1,98 +1,70 @@
 <template>
-  <div id="loginDiv">
-    <form @submit.prevent="login">
-      <input type="text" v-model="email" placeholder="email">
-      <input type="password" v-model="password" placeholder="Пароль">
-      <div id="formBtns">
-        <router-link to="register">Регистрация</router-link>
-        <input type="submit" value="Войти">
-      </div>
-    </form>
-    <p v-if="this.$store.state.AUTH_ERROR.length !== 0" style="color: red">{{this.$store.state.AUTH_ERROR}}</p>
-  </div>
+  <form @submit.prevent="login">
+    <h2>Вход</h2>
+    <div>
+      <label for="username">Логин</label>
+      <input id="username" v-model="email" type="text" placeholder="User01">
+    </div>
+    <div>
+      <label for="password">Пароль</label>
+      <input id="password" v-model="password" type="password" placeholder="*******">
+    </div>
+    <input type="submit" value="Войти">
+  </form>
 </template>
 
 <script>
 export default {
-  name: "LoginPage",
-  data(){
+  name: "LoginView",
+  data() {
     return {
-      fullName: '',
-      email: '',
-      password: '',
+      email: this.email,
+      password: this.password,
     }
   },
   methods: {
-    login(){
-      const USERDATA = {
+    login() {
+      const userData = {
         email: JSON.parse(JSON.stringify(this.email)),
         password: JSON.parse(JSON.stringify(this.password)),
-      }
-
-      this.$store.dispatch('LOGIN', USERDATA)
-    }
+      };
+      this.$store
+          .dispatch('LOGIN', userData)
+    },
   }
 }
 </script>
 
 <style scoped>
-
-#loginDiv{
-  width: 100%;
+form > div {
+  width: 340px;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
-form{
-  margin-top: 100px;
-  border-radius: 10px;
-  width: 300px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  background: mediumseagreen;
-}
-input[type=text], input[type=password], input[type=email]{
-  color: white;
-  background: transparent;
-  border: none;
-  padding: 2px;
-  outline: none;
-  border-bottom: 2px solid white;
-}
 
-input[type=text]::placeholder, input[type=password]::placeholder, input[type=email]::placeholder{
-  color: white;
-}
-
-input[type=text]:focus, input[type=password]:focus, input[type=email]:focus{
-  border-bottom: 2px solid forestgreen;
-}
-
-#formBtns{
-  width: 260px;
-  display: flex;
-  justify-content: space-around;
-}
-
-#formBtns a{
-  color: white;
-}
-
-input[type=submit]{
-  width: 80px;
+form > div > input {
+  margin: 10px 0;
+  width: 250px;
   height: 30px;
-  background-color: forestgreen;
-  outline: none;
-  color: white;
-  border: none;
+  padding-left: 10px;
+  border: 2px solid #2c3e50;
   border-radius: 5px;
 }
 
-input[type=submit]:hover{
-  background-color: limegreen;
-  color: dimgray;
+form > div > input:focus {
+  outline: none;
+  border: 2px solid rgb(248, 98, 36);
+}
+
+form > input {
+  margin: 20px 0;
+  width: 80px;
+  height: 30px;
+  border: 2px solid #2c3e50;
+  border-radius: 5px;
+  background: rgba(239, 88, 25, 0.8);
+  cursor: pointer;
 }
 </style>
