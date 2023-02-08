@@ -7,7 +7,7 @@
 import NavigHeader from "@/components/NavigHeader";
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     NavigHeader
   }
