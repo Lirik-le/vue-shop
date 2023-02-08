@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import CartView from '../views/CartView.vue'
 import OrdersView from '../views/OrdersView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import LoginView from '../views/LoginView.vue'
+import CatalogView from '../views/CatalogView.vue'
+
 import store from '../store'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -33,17 +36,13 @@ const routes = [
   {
     path: '/catalog',
     name: 'catalog',
-    component: function () {
-      return import('../views/CatalogView.vue')
-    },
+    component: CatalogView,
     beforeEnter: ifAuthenticated
   },
   {
     path: '/login',
     name: 'login',
-    component: function () {
-      return import('../views/LoginView.vue')
-    },
+    component: LoginView,
     beforeEnter: ifNotAuthenticated
   },
   {
@@ -55,6 +54,10 @@ const routes = [
     path: '/register',
     name: 'register',
     component: RegisterView
+  },
+  {
+    path: '/logout',
+    redirect: {name: 'login'}
   },
 ]
 

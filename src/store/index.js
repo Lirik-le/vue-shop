@@ -48,7 +48,9 @@ export default createStore({
       }
     },
     async LOGOUT(){
+      localStorage.removeItem('MyAppToken', this.state.token)
       this.state.token = '';
+      await axios.get(this.state.API + 'logout')
     }
   },
 })
