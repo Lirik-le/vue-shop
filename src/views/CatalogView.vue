@@ -1,10 +1,26 @@
 <template>
-  <h2>Каталог</h2>
+    <card-product :allProducts="allProducts"/>
 </template>
 
 <script>
+import CardProduct from "@/components/CartProduct";
+import axios from "axios";
+
 export default {
-  name: "catalog"
+    name: "catalog",
+    components: {
+        CardProduct
+    },
+    data() {
+        return {
+            allProducts: []
+        }
+    },
+    mounted() {
+        axios.get(this.$store.state.API + 'products').then((response) => {
+            this.allProducts = response.data
+        })
+    }
 }
 </script>
 

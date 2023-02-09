@@ -1,10 +1,10 @@
 <template>
-  <h2>Заказы</h2>
+    <h2>Заказы</h2>
 </template>
 
 <script>
 export default {
-  name: "OrdersView"
+    name: "OrdersView"
 }
 </script>
 
