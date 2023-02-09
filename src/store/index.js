@@ -5,6 +5,7 @@ import router from "@/router";
 export default createStore({
     state: {
         token: localStorage.getItem('token'),
+        type_token: 'Bearer ',
         API: 'https://jurapro.bhuser.ru/api-shop/',
         cart: [],
         cartCount: 0
@@ -16,62 +17,51 @@ export default createStore({
         auth_success: (state, token) => {
             state.token = token
         },
-        AUTH_ERROR: (state) => {
+        auth_error: (state) => {
             state.token = '';
         },
-        addToCart(state, item) {
-            let found = state.cart.find(product => product.id == item.id);
-
-            if (!found) {
-                state.cart.push(item);
-            }
-
-            state.cartCount++;
-            console.log(state.cart)
-        }
+        cart_update: (state, payload) => {
+            state.cart = payload
+            state.cartCount = payload.length
+        },
     },
     actions: {
-        async ADDTOCARD({commit}, user) {
-            try {
-                await axios.post(this.state.API + 'cart/' + product_id).then((response) => {
-                    commit('auth_success', this.state.token)
-                    this.state.token = response.data.data.token
-                    localStorage.setItem('token', this.state.token)
-                    axios.defaults.headers = {Authorisation: this.state.token}
-                    router.push('/')
-                })
-            } catch (error) {
-                commit('AUTH_ERROR');
-                localStorage.removeItem('token');
-            }
+        async to_cart({commit}, product_id) {
+            await axios.post(this.state.API + 'cart/' + product_id, {}, {headers: {Authorization: this.state.type_token + this.state.token}})
         },
-        async LOGIN({commit}, user) {
+        async get_cart({commit}) {
+            await axios.get(this.state.API + 'cart', {headers: {Authorization: this.state.type_token + this.state.token}})
+                .then((response) => {
+                    commit('cart_update', response.data.data)
+                })
+        },
+        async login({commit}, user) {
             try {
                 await axios.post(this.state.API + 'login', user).then((response) => {
                     this.state.token = response.data.data.user_token
                     localStorage.setItem('token', this.state.token)
-                    axios.defaults.headers = {Authorisation: this.state.token}
+                    axios.defaults.headers = {Authorisation: this.state.type_token + this.state.token}
                     router.push('/')
                 })
             } catch (error) {
-                commit('AUTH_ERROR');
+                commit('auth_error');
                 localStorage.removeItem('token');
             }
         },
-        async REGISTER({commit}, user) {
+        async register({commit}, user) {
             try {
                 await axios.post(this.state.API + 'signup', user).then((response) => {
                     this.state.token = response.data.data.token
                     localStorage.setItem('token', this.state.token)
-                    axios.defaults.headers = {Authorisation: this.state.token}
+                    axios.defaults.headers = {Authorisation: this.state.type_token + this.state.token}
                     router.push('/')
                 })
             } catch (error) {
-                commit('AUTH_ERROR');
+                commit('auth_error');
                 localStorage.removeItem('token');
             }
         },
-        async LOGOUT() {
+        async logout() {
             localStorage.removeItem('token', this.state.token)
             this.state.token = '';
             await axios.get(this.state.API + 'logout')

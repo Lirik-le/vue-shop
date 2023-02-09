@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import CardProduct from "@/components/CartProduct";
+import CardProduct from "@/components/CardProduct.vue";
 import axios from "axios";
 
 export default {

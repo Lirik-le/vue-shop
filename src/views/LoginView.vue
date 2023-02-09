@@ -29,7 +29,7 @@ export default {
                 password: JSON.parse(JSON.stringify(this.password)),
             };
             this.$store
-                .dispatch('LOGIN', userData)
+                .dispatch('login', userData)
         },
     }
 }

@@ -7,7 +7,7 @@
                 <p>{{ card.description }}</p>
                 <div>
                     <span><b>{{ card.price }} &#8381;</b></span>
-                    <button v-if="this.$store.getters.isAuthenticated" @click="addToCard(card)">В корзину</button>
+                    <button v-if="this.$store.getters.isAuthenticated" @click="toCart(card)">В корзину</button>
                 </div>
             </div>
         </div>
@@ -19,10 +19,10 @@ export default {
     name: "CardProduct",
     props: ['allProducts'],
     methods: {
-        addToCard(card) {
-            this.$store.commit('addToCart', card)
+        toCart(card) {
+            this.$store.dispatch('to_cart', card.id)
         }
-    }
+    },
 }
 </script>
 

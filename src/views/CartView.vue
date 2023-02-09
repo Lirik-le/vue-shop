@@ -1,20 +1,37 @@
 <template>
-    <div v-if="$store.state.cart.length > 0">
-        <div v-for="card in $store.state.cart">
-            <h2>{{ card.name }}</h2>
+    <div>
+        <h2>Корзина: {{ $store.state.cartCount }}</h2>
+    </div>
+    <div v-if="cart.length > 0">
+        <div v-for="card in cart">
+            <p>{{ card }}</p>
         </div>
     </div>
 
     <div v-else>
-        <a>
+        <p>
             Корзина пуста
-        </a>
+        </p>
     </div>
 </template>
 
 <script>
 export default {
     name: "CartView",
+    computed: {
+        cart() {
+            let uniqueCart = [];
+
+            for (let str of this.$store.state.cart) {
+                if (!uniqueCart.includes(str)) {
+                    uniqueCart.push(str);
+                }
+            }
+            console.log(uniqueCart)
+            console.log(this.$store.state.cart.length)
+            return new Set(this.$store.state.cart)
+        }
+    }
 }
 </script>
 

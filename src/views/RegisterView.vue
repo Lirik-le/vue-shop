@@ -35,7 +35,7 @@ export default {
                 password: this.password,
             };
             this.$store
-                .dispatch('REGISTER', userData)
+                .dispatch('register', userData)
         },
     }
 }
