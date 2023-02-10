@@ -25,6 +25,10 @@ export default createStore({
             state.cart = data
             state.cartCount = data.length
         },
+        cart_delete: (state) => {
+            state.cart = []
+            state.cartCount = 0
+        },
         order_update: (state, data) => {
             state.orders = data
         },
@@ -49,6 +53,9 @@ export default createStore({
         },
         async to_order({commit}){
             await axios.post(this.state.API + 'order', {}, {headers: {Authorization: this.state.type_token + this.state.token}})
+                .then((response) => {
+                    commit('cart_delete', response.data.data)
+                })
         },
         async login({commit}, user) {
             try {
