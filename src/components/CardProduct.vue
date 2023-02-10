@@ -21,6 +21,7 @@ export default {
     methods: {
         toCart(card) {
             this.$store.dispatch('to_cart', card.id)
+            this.$store.dispatch('get_cart', card.id)
         }
     },
 }

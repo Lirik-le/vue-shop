@@ -15,7 +15,7 @@
         </div>
         <div>
             <p>{{ fullSum }} &#8381;</p>
-            <button>Оформить заказ</button>
+            <button @click="toOrder">Оформить заказ</button>
         </div>
     </div>
 
@@ -39,13 +39,18 @@ export default {
             this.$store.dispatch('from_cart', card.id)
             this.$store.dispatch('get_cart')
         },
+        toOrder() {
+            this.$store.dispatch('to_order')
+        },
+    },
+    mounted() {
+        this.$store.dispatch('get_cart')
     },
     computed: {
         fullSum() {
             this.sum = 0
             this.$store.state.cart.forEach(card => {
                 this.sum+=card.price
-                console.log(this.sum)
             })
             return this.sum
         }

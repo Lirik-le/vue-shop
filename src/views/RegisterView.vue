@@ -6,7 +6,7 @@
             <input id="lastName" v-model="fio" type="text" placeholder="Горошин">
         </div>
         <div>
-            <label htmlFor="username">Логин</label>
+            <label htmlFor="username">Почта</label>
             <input id="username" v-model="email" type="text" placeholder="User01">
         </div>
         <div>

@@ -2,7 +2,7 @@
     <form @submit.prevent="login">
         <h2>Вход</h2>
         <div>
-            <label for="username">Логин</label>
+            <label for="username">Почта</label>
             <input id="username" v-model="email" type="text" placeholder="User01">
         </div>
         <div>

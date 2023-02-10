@@ -3,7 +3,7 @@
         <h1>Просто купить</h1>
         <div class="nav">
             <router-link to="catalog"><p>Каталог</p></router-link>
-            <router-link @click="toCart" to="cart"><p>Корзина</p></router-link>
+            <router-link to="cart"><p>Корзина ({{ this.$store.state.cartCount }})</p></router-link>
             <router-link to="orders"><p>Заказы</p></router-link>
             <router-link v-if="!this.$store.getters.isAuthenticated" to="login"><p>Вход</p></router-link>
             <router-link v-if="!this.$store.getters.isAuthenticated" to="register"><p>Регистрация</p></router-link>
@@ -19,9 +19,6 @@ export default {
         logout() {
             this.$store.dispatch('logout')
         },
-        toCart() {
-            this.$store.dispatch('get_cart')
-        }
     }
 }
 </script>
