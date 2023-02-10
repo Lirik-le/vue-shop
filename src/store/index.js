@@ -35,6 +35,9 @@ export default createStore({
                     commit('cart_update', response.data.data)
                 })
         },
+        async from_cart({commit}, product_id) {
+            await axios.delete(this.state.API + 'cart/' + product_id, {headers: {Authorization: this.state.type_token + this.state.token}})
+        },
         async login({commit}, user) {
             try {
                 await axios.post(this.state.API + 'login', user).then((response) => {
